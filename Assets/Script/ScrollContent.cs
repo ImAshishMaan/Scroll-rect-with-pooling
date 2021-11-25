@@ -6,7 +6,7 @@ public class ScrollContent : MonoBehaviour {
 
     private RectTransform[] rtChildren;
 
-    private float height;
+    private float width, height;
 
     private float childWidth, childHeight;
 
@@ -26,8 +26,9 @@ public class ScrollContent : MonoBehaviour {
     public float ItemSpacing { get { return itemSpacing; } }
     public float Height { get { return height; } }
     public float ChildWidth { get { return childWidth; } }
+    public bool Horizontal { get { return horizontal; } }
 
-
+    public float Width { get { return width; } }
 
     private void Start() {
         rectTransform = GetComponent<RectTransform>();
@@ -39,7 +40,7 @@ public class ScrollContent : MonoBehaviour {
         for(int i=0; i< rectTransform.childCount; i++) {
             rtChildren[i] = (RectTransform) rectTransform.GetChild(i);
         }
-
+        width = rectTransform.rect.width - (2 * horizontalMargin);
         height = rectTransform.rect.height - (2 * verticalMargin);
 
         childWidth = rtChildren[0].rect.width;

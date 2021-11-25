@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InfiniteScroll : MonoBehaviour {
+public class InfiniteScroll : MonoBehaviour , IDragHandler {
 
     [SerializeField] private ScrollContent scrollContent;
 
@@ -16,21 +16,24 @@ public class InfiniteScroll : MonoBehaviour {
     private void Start() {
         scrollRect = GetComponent<ScrollRect>();
         scrollRect.vertical = scrollContent.Vertical;
+        
         scrollRect.movementType = ScrollRect.MovementType.Unrestricted;
     }
 
-    public void OnDrag(PointerEventData eventData) {
-        if (scrollContent.Vertical) {
-            positiveDrag = eventData.position.y > lastDragPosition.y;
-        }
+    public void OnBeginDrag(PointerEventData eventData) {
+        lastDragPosition = eventData.position;
+    }
 
+    public void OnDrag(PointerEventData eventData) {
+        positiveDrag = eventData.position.y > lastDragPosition.y;
+        
         lastDragPosition = eventData.position;
     }
 
 
-
     public void OnViewScroll() {
-          HandleVerticalScroll(); 
+        
+         HandleVerticalScroll(); 
     }
 
     private void HandleVerticalScroll() {
@@ -57,10 +60,11 @@ public class InfiniteScroll : MonoBehaviour {
 
     private bool ReachedThreshold(Transform item) {
        
-            float posYThreshold = transform.position.y + scrollContent.Height * 0.5f + outOfBoundsThreshold;
-            float negYThreshold = transform.position.y - scrollContent.Height * 0.5f - outOfBoundsThreshold;
-            return positiveDrag ? item.position.y - scrollContent.ChildWidth * 0.5f > posYThreshold :
-                item.position.y + scrollContent.ChildWidth * 0.5f < negYThreshold;
+        float posYThreshold = transform.position.y + scrollContent.Height * 0.5f + outOfBoundsThreshold;
+        float negYThreshold = transform.position.y - scrollContent.Height * 0.5f - outOfBoundsThreshold;
+        return positiveDrag ? item.position.y - scrollContent.ChildWidth * 0.5f > posYThreshold :
+            item.position.y + scrollContent.ChildWidth * 0.5f < negYThreshold;
         
     }
 }
+
