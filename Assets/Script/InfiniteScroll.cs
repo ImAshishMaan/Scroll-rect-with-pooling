@@ -14,14 +14,7 @@ public class InfiniteScroll : MonoBehaviour , IDragHandler {
 
 
     private void Start() {
-        scrollRect = GetComponent<ScrollRect>();
-        scrollRect.vertical = scrollContent.Vertical;
-        
-        scrollRect.movementType = ScrollRect.MovementType.Unrestricted;
-    }
-
-    public void OnBeginDrag(PointerEventData eventData) {
-        lastDragPosition = eventData.position;
+        scrollRect = GetComponent<ScrollRect>();      
     }
 
     public void OnDrag(PointerEventData eventData) {
@@ -30,9 +23,7 @@ public class InfiniteScroll : MonoBehaviour , IDragHandler {
         lastDragPosition = eventData.position;
     }
 
-
     public void OnViewScroll() {
-        
          HandleVerticalScroll(); 
     }
 

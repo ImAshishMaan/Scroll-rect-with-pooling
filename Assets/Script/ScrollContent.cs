@@ -21,14 +21,12 @@ public class ScrollContent : MonoBehaviour {
 
 
 
-    public bool Vertical { get { return vertical; } }
     public float ChildHeight { get { return childHeight; } }
     public float ItemSpacing { get { return itemSpacing; } }
     public float Height { get { return height; } }
     public float ChildWidth { get { return childWidth; } }
-    public bool Horizontal { get { return horizontal; } }
 
-    public float Width { get { return width; } }
+
 
     private void Start() {
         rectTransform = GetComponent<RectTransform>();
@@ -40,6 +38,7 @@ public class ScrollContent : MonoBehaviour {
         for(int i=0; i< rectTransform.childCount; i++) {
             rtChildren[i] = (RectTransform) rectTransform.GetChild(i);
         }
+
         width = rectTransform.rect.width - (2 * horizontalMargin);
         height = rectTransform.rect.height - (2 * verticalMargin);
 
@@ -53,9 +52,11 @@ public class ScrollContent : MonoBehaviour {
         float originY = 0 - (height * 0.5f);
         float posOffset = childHeight * 0.5f;
         for (int i = 0; i < rtChildren.Length; i++) {
+
             Vector2 childPos = rtChildren[i].localPosition;
             childPos.y = originY + posOffset + i * (childHeight + itemSpacing);
             rtChildren[i].localPosition = childPos;
+
         }
     }
 }
