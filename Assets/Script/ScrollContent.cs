@@ -31,7 +31,6 @@ public class ScrollContent : MonoBehaviour {
 
 
 
-
     private void Start() {
         rectTransform = GetComponent<RectTransform>();
 
@@ -49,7 +48,6 @@ public class ScrollContent : MonoBehaviour {
         childWidth = rtChildren[0].rect.width;
         childHeight = rtChildren[0].rect.height;
 
-        horizontal = !vertical;
         if (vertical)
             InitializeContentVertical();
         else

@@ -17,6 +17,7 @@ public class InfiniteScroll : MonoBehaviour , IDragHandler {
         scrollRect = GetComponent<ScrollRect>();      
     }
 
+    // To check which box Im draging
     public void OnDrag(PointerEventData eventData) {
         if (scrollContent.Vertical) {
             positiveDrag = eventData.position.y > lastDragPosition.y;
