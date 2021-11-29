@@ -18,15 +18,24 @@ public class InfiniteScroll : MonoBehaviour , IDragHandler {
     }
 
     public void OnDrag(PointerEventData eventData) {
-        positiveDrag = eventData.position.y > lastDragPosition.y;
-        
+        if (scrollContent.Vertical) {
+            positiveDrag = eventData.position.y > lastDragPosition.y;
+        } else if (scrollContent.Horizontal) {
+            positiveDrag = eventData.position.x > lastDragPosition.x;
+        }
+
         lastDragPosition = eventData.position;
     }
 
     public void OnViewScroll() {
-         HandleVerticalScroll(); 
+        if (scrollContent.Vertical) {
+            HandleVerticalScroll();
+        } else {
+            HandleHorizontalScroll();
+        }
     }
 
+    // Vertical Scroll
     private void HandleVerticalScroll() {
         int currItemIndex = positiveDrag ? scrollRect.content.childCount - 1 : 0;
         var currItem = scrollRect.content.GetChild(currItemIndex);
@@ -49,13 +58,40 @@ public class InfiniteScroll : MonoBehaviour , IDragHandler {
         currItem.SetSiblingIndex(endItemIndex);
     }
 
+    // Horizontal Scroll
+    private void HandleHorizontalScroll() {
+        int currItemIndex = positiveDrag ? scrollRect.content.childCount - 1 : 0;
+        var currItem = scrollRect.content.GetChild(currItemIndex);
+        if (!ReachedThreshold(currItem)) {
+            return;
+        }
+
+        int endItemIndex = positiveDrag ? 0 : scrollRect.content.childCount - 1;
+        Transform endItem = scrollRect.content.GetChild(endItemIndex);
+        Vector2 newPos = endItem.position;
+
+        if (positiveDrag) {
+            newPos.x = endItem.position.x - scrollContent.ChildWidth * 1.5f + scrollContent.ItemSpacing;
+        } else {
+            newPos.x = endItem.position.x + scrollContent.ChildWidth * 1.5f - scrollContent.ItemSpacing;
+        }
+
+        currItem.position = newPos;
+        currItem.SetSiblingIndex(endItemIndex);
+    }
+
     private bool ReachedThreshold(Transform item) {
-       
-        float posYThreshold = transform.position.y + scrollContent.Height * 0.5f + outOfBoundsThreshold;
-        float negYThreshold = transform.position.y - scrollContent.Height * 0.5f - outOfBoundsThreshold;
-        return positiveDrag ? item.position.y - scrollContent.ChildWidth * 0.5f > posYThreshold :
-            item.position.y + scrollContent.ChildWidth * 0.5f < negYThreshold;
-        
+        if (scrollContent.Vertical) {
+            float posYThreshold = transform.position.y + scrollContent.Height * 0.5f + outOfBoundsThreshold;
+            float negYThreshold = transform.position.y - scrollContent.Height * 0.5f - outOfBoundsThreshold;
+            return positiveDrag ? item.position.y - scrollContent.ChildWidth * 0.5f > posYThreshold :
+                item.position.y + scrollContent.ChildWidth * 0.5f < negYThreshold;
+        } else {
+            float posXThreshold = transform.position.x + scrollContent.Width * 0.5f + outOfBoundsThreshold;
+            float negXThreshold = transform.position.x - scrollContent.Width * 0.5f - outOfBoundsThreshold;
+            return positiveDrag ? item.position.x - scrollContent.ChildWidth * 0.5f > posXThreshold :
+                item.position.x + scrollContent.ChildWidth * 0.5f < negXThreshold;
+        }
     }
 }
 

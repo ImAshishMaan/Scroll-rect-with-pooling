@@ -20,11 +20,15 @@ public class ScrollContent : MonoBehaviour {
     private bool horizontal, vertical;
 
 
-
+    // calls from infiniteScroll script
     public float ChildHeight { get { return childHeight; } }
     public float ItemSpacing { get { return itemSpacing; } }
     public float Height { get { return height; } }
     public float ChildWidth { get { return childWidth; } }
+    public bool Vertical { get { return vertical; } }
+    public float Width { get { return width; } }
+    public bool Horizontal { get { return horizontal; } }
+
 
 
 
@@ -44,8 +48,12 @@ public class ScrollContent : MonoBehaviour {
 
         childWidth = rtChildren[0].rect.width;
         childHeight = rtChildren[0].rect.height;
-        
-        InitializeContentVertical();
+
+        horizontal = !vertical;
+        if (vertical)
+            InitializeContentVertical();
+        else
+            InitializeContentHorizontal();
     }
 
     private void InitializeContentVertical() {
@@ -57,6 +65,16 @@ public class ScrollContent : MonoBehaviour {
             childPos.y = originY + posOffset + i * (childHeight + itemSpacing);
             rtChildren[i].localPosition = childPos;
 
+        }
+    }
+
+    private void InitializeContentHorizontal() {
+        float originX = 0 - (width * 0.5f);
+        float posOffset = childWidth * 0.5f;
+        for (int i = 0; i < rtChildren.Length; i++) {
+            Vector2 childPos = rtChildren[i].localPosition;
+            childPos.x = originX + posOffset + i * (childWidth + itemSpacing);
+            rtChildren[i].localPosition = childPos;
         }
     }
 }
