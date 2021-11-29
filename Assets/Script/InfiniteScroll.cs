@@ -13,7 +13,7 @@ public class InfiniteScroll : MonoBehaviour , IDragHandler {
     private bool positiveDrag;
 
 
-    private void Start() {
+    private void Awake() {
         scrollRect = GetComponent<ScrollRect>();      
     }
 
@@ -28,6 +28,7 @@ public class InfiniteScroll : MonoBehaviour , IDragHandler {
         lastDragPosition = eventData.position;
     }
 
+    // calling the respective function according to clicking on horizontal or vertical box
     public void OnViewScroll() {
         if (scrollContent.Vertical) {
             HandleVerticalScroll();
